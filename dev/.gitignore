@@ -1,0 +1,5 @@
+.terraform/*
+scripts/output.txt
+out.terraform
+terraform.tfstate
+terraform.tfstate.*

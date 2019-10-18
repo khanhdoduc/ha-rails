@@ -1,0 +1,59 @@
+variable "S3_BUCKET_NAME" {
+  description = "Name of the S3 bucket using for CF distribution"
+}
+
+variable "BUCKET_REGIONAL_DOMAIN_NAME" {
+  description = "The DNS domain name of S3 bucket"
+}
+
+variable "ENV" {}
+
+locals {
+  s3_origin_id = "S3-${var.S3_BUCKET_NAME}"
+}
+
+resource "aws_cloudfront_distribution" "s3-distribution" {
+  origin {
+    domain_name = "${var.BUCKET_REGIONAL_DOMAIN_NAME}"
+    origin_id   = "${local.s3_origin_id}"
+  }
+
+  enabled         = true
+  is_ipv6_enabled = true
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "${local.s3_origin_id}"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "allow-all"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  price_class = "PriceClass_200"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  tags = {
+    Terraform   = "true"
+    Environment = "${var.ENV}"
+  }
+}
