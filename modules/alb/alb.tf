@@ -1,7 +1,9 @@
 variable "SECURITY_GROUP" {}
 variable "ENV" {}
 variable "VPC_ID" {}
-variable "INSTANCE_ID" {}
+variable "INSTANCE_IDS" {
+  type = "string"
+}
 
 variable "PUBLIC_SUBNETS" {
   type = "list"
@@ -18,7 +20,7 @@ resource "aws_lb" "infra-alb" {
   security_groups    = ["${var.SECURITY_GROUP}"]
   subnets            = ["${var.PUBLIC_SUBNETS}"]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   #   access_logs {
   #     bucket  = "${aws_s3_bucket.lb_logs.bucket}"
@@ -70,9 +72,10 @@ resource "aws_lb_target_group" "infra-target-group" {
 
 resource "aws_lb_target_group_attachment" "infra-target-group-attachment" {
   target_group_arn = "${aws_lb_target_group.infra-target-group.arn}"
-  target_id        = "${var.INSTANCE_ID}"
+  target_id        = "${var.INSTANCE_IDS}"
   port             = 80
 }
+
 
 output "target_group_arn" {
   value = "${aws_lb_target_group.infra-target-group.arn}"

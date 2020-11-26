@@ -1,5 +1,6 @@
 variable "ENV" {}
 variable "AMI" {}
+
 # variable "USER_DATA" {}
 # variable "USER_DATA_FOR_SCALE" {}
 

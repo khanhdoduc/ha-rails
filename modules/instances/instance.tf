@@ -22,7 +22,7 @@ resource "aws_instance" "instance" {
 
   # the VPC subnet
   subnet_id = "${var.PRIVATE_SUBNETS[0]}"
-  
+
   # the security group
   vpc_security_group_ids = ["${var.SECURITY_GROUP}"]
 
@@ -47,13 +47,8 @@ output "bastion_ssh_user" {
   value = "${module.bastion-host.ssh_user}"
 }
 
-output "bastion_sg_id" {
-  value = "${module.bastion-host.ssh_user}"
-}
-
-
-output "public_ip" {
-  value = "${aws_instance.instance.public_ip}"
+output "private_ip" {
+  value = "${aws_instance.instance.private_ip}"
 }
 
 output "bastion_sg" {

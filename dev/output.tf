@@ -14,8 +14,8 @@ output "bastion_ssh_user" {
   value = "${module.linux2ami-instance.bastion_ssh_user}"
 }
 
-output "railsapp_public_ip" {
-  value = "${module.linux2ami-instance.public_ip}"
+output "railsapp_private_ip" {
+  value = "${module.linux2ami-instance.private_ip}"
 }
 
 output "bastion_sg" {
